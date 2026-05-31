@@ -179,13 +179,6 @@ ul.dots{list-style:none;display:flex;flex-wrap:wrap;gap:6px}
 .pack-item input{width:20px;height:20px;accent-color:var(--cyan)}
 .pack-item.done span{text-decoration:line-through;color:var(--ink-dim)}
 
-/* ===================== STANDINGS ===================== */
-.lb-row{display:flex;align-items:center;gap:12px;padding:11px 12px;border-bottom:1px solid var(--line)}
-.lb-rank{font-family:var(--display);font-size:1.1rem;width:34px;color:var(--ink-dim)}
-.lb-row.top .lb-rank{color:var(--gold)}
-.lb-name{flex:1;font-weight:600}
-.lb-score{font-family:var(--mono);font-weight:800;color:var(--cyan);font-size:1.1rem}
-
 /* ===================== INTEL (fake) ===================== */
 #intel .intel-card{border:2px solid var(--cyan);border-radius:14px;background:repeating-linear-gradient(135deg,rgba(46,122,74,.07) 0 12px,transparent 12px 24px);cursor:pointer}
 .intel-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px}
@@ -219,7 +212,6 @@ footer{text-align:center;padding:40px 18px 70px;color:var(--ink-dim);font-family
   <a href="#mess">Mess Hall</a>
   <a href="#lake">Lake HQ</a>
   <a href="#packing">Packing</a>
-  <a href="#standings">Standings</a>
   <a href="#sound">Soundtrack</a>
   <a href="#vault">Vault</a>
 </nav>
@@ -308,15 +300,6 @@ footer{text-align:center;padding:40px 18px 70px;color:var(--ink-dim);font-family
   <h2 class="title">PACKING <span class="alt">LIST</span> ✅</h2>
   <p class="sub">Checks save to your device. Forget the cursed item at your own peril.</p>
   <div class="grid g2" id="packing-cols"></div>
-</section>
-
-<!-- ===================== STANDINGS ===================== -->
-<section id="standings">
-  <div class="eyebrow">// the eternal contest</div>
-  <h2 class="title">THE <span class="alt">STANDINGS</span> 🏆</h2>
-  <p class="sub" id="standingsMetric"></p>
-  <div class="card reveal" id="leaderboard" style="padding:6px 4px"></div>
-  <div class="note">File-maintained in v1 — edit <b>STANDINGS</b> in index.html and push.</div>
 </section>
 
 <!-- ===================== INTEL (fake) ===================== -->
@@ -444,7 +427,7 @@ const RESERVATIONS = "Staying at Greg's place (HQ). Boat = Paul's. Pears Ice Cre
 
 const LAKE = {
   // ⚠️ TODO: confirm exact lat/long for your dock. Default ≈ Oxford, ME end of Thompson Lake.
-  lat: 44.10, lon: -70.52,
+  lat: 44.07089, lon: -70.47969,   // 114 Black Island Rd dock
   dockTemp: "72",                       // manual water temp °F — update + push
   bathymetry: "",                       // paste depth-map image URL here
   wildlife: "Loons (the official mascot — listen for them at night), bald eagles, smallmouth bass, largemouth bass, the occasional moose sighting on the access road. Source: lakesofmaine.org Thompson Lake page.",
@@ -456,20 +439,6 @@ const PACKING = {
   "Lake": ["Swim trunks","Water shoes","Fishing gear","Cooler","Floaties","Cooler #2"],
   "Nighttime": ["Hoodie","Bug spray","Headlamp","Firewood money","Cards"],
   "The One Cursed Item": ["The inflatable flamingo (you know the one) 🦩"],
-};
-
-const STANDINGS = {
-  metric: "The Dock Cup — points for cannonballs, fish caught, lobsters wrangled, card-game wins, and winning the Zeppelin/Who debate. Loser buys breakfast. (Real metric + scores TBD — define it and I'll wire it.)",
-  players: [
-    { name:"Paul",  score:0 },
-    { name:"Greg",  score:0 },
-    { name:"Jon",   score:0 },
-    { name:"Dave",  score:0 },
-    { name:"Tony",  score:0 },
-    { name:"Pete",  score:0 },
-    { name:"Bill",  score:0 },
-    { name:"Mike",  score:0 },
-  ],
 };
 
 // ⚠️ TODO: paste a Spotify (or other) playlist EMBED url
@@ -598,12 +567,6 @@ cols.querySelectorAll('.pack-item').forEach(l=>{
     packState[l.dataset.k]=e.target.checked; l.classList.toggle('done',e.target.checked); savePack();
   });
 });
-
-/* ---- STANDINGS ---- */
-document.getElementById('standingsMetric').textContent = STANDINGS.metric;
-const medals=['🥇','🥈','🥉'];
-document.getElementById('leaderboard').innerHTML = [...STANDINGS.players].sort((a,b)=>b.score-a.score)
-  .map((p,i)=>`<div class="lb-row ${i<3?'top':''}"><div class="lb-rank">${medals[i]||(i+1)}</div><div class="lb-name">${p.name}</div><div class="lb-score">${p.score}</div></div>`).join('');
 
 /* ---- INTEL gag ---- */
 document.getElementById('intelBody').innerHTML =
