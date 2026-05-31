@@ -170,7 +170,12 @@ ul.dots{list-style:none;display:flex;flex-wrap:wrap;gap:6px}
 .metric .v{font-family:var(--mono);font-weight:800;font-size:2rem;color:var(--gold)}
 .metric .u{color:var(--ink-dim);font-size:.85rem}
 .dock-input{font-family:var(--mono);background:var(--bg2);border:2px solid var(--cyan);color:var(--gold);border-radius:10px;padding:8px 10px;width:90px;font-size:1.1rem;font-weight:800}
-.bathy{width:100%;border-radius:14px;border:2px solid var(--line);margin-top:10px;background:var(--bg2);min-height:150px;display:flex;align-items:center;justify-content:center;color:var(--ink-dim);font-family:var(--mono);font-size:.75rem;text-align:center;padding:30px}
+.bathy{width:100%;border-radius:14px;border:2px solid var(--line);margin-top:10px;background:var(--bg2);min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--ink-dim);font-family:var(--mono);font-size:.78rem;text-align:center;padding:24px}
+.field-guide{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+.critter{background:var(--card2);border:1px solid var(--line);border-radius:14px;overflow:hidden;text-align:center}
+.critter .pic{font-size:2.7rem;padding:16px 0 6px;background:linear-gradient(160deg,rgba(46,122,74,.20),rgba(46,122,74,.04));line-height:1}
+.critter .nm{font-family:var(--display);font-size:.78rem;color:var(--ink);padding:8px 8px 0}
+.critter .desc{font-size:.74rem;color:var(--ink-dim);padding:5px 10px 12px;line-height:1.4}
 
 /* ===================== PACKING ===================== */
 .pack-group{margin-bottom:14px}
@@ -287,10 +292,15 @@ footer{text-align:center;padding:40px 18px 70px;color:var(--ink-dim);font-family
     <div class="card reveal"><div class="cd-lab" style="color:var(--cyan)">🐟 DOCK REPORT · WATER TEMP</div><div class="metric"><input class="dock-input" id="dockTemp" value=""><span class="u">°F</span></div><div class="cd-lab">manually maintained</div></div>
   </div>
   <div class="grid g2" style="margin-top:16px">
-    <div class="card reveal"><h4 style="font-family:var(--display);color:var(--gold);margin-bottom:6px">🗺️ Bathymetry</h4><div class="bathy" id="bathy">drop the Thompson Lake depth map URL into LAKE.bathymetry</div></div>
-    <div class="card reveal"><h4 style="font-family:var(--display);color:var(--gold);margin-bottom:6px">🦅 Wildlife</h4><p id="wildlife" style="font-size:.9rem"></p></div>
+    <div class="card reveal"><h4 style="font-family:var(--display);color:var(--gold);margin-bottom:6px">🗺️ Bathymetry</h4><div class="bathy" id="bathy"></div></div>
+    <div class="card reveal"><h4 style="font-family:var(--display);color:var(--gold);margin-bottom:6px">⚓ Amenities</h4><div id="amenities" style="font-size:.9rem"></div></div>
   </div>
-  <div class="card reveal" style="margin-top:16px"><h4 style="font-family:var(--display);color:var(--gold);margin-bottom:6px">⚓ Amenities</h4><div id="amenities" style="font-size:.9rem"></div></div>
+  <div class="card reveal" style="margin-top:16px">
+    <h4 style="font-family:var(--display);color:var(--gold);margin-bottom:4px">🦅 Wildlife Field Guide</h4>
+    <p style="font-size:.85rem;color:var(--ink-dim);margin-bottom:14px">What you'll see and hear out here. Thompson runs ~4,419 acres and up to 121 ft deep — plenty of room for all of it.</p>
+    <div class="field-guide" id="fieldGuide"></div>
+    <p style="font-size:.72rem;color:var(--ink-dim);margin-top:14px">Source: lakesofmaine.org Thompson Lake page · Maine DEP &amp; IF&amp;W.</p>
+  </div>
   <div class="note">Note from build: USGS-01058000 is a <b>lake-level (stage/elevation)</b> gage — it does <b>not</b> serve water temp. So water temp stays manual via the Dock Report above.</div>
 </section>
 
@@ -409,30 +419,43 @@ const ROSTER = [
 ];
 
 const ITINERARY = [
-  { day:"THURSDAY · JUL 9", head:"Roll In & First Cook", body:"Arrive at Greg's mid-afternoon, claim bunks, crack the first round. Paul fires up the grill for dinner. Sunset dock beers and the year's first Zeppelin-vs-Who argument." },
-  { day:"FRIDAY · JUL 10", head:"Full Send + Lobster Night 🦞", body:"Boat out all day — swimming, fishing lies, and someone inevitably getting pulled around on skis. Mike returns with absurd lobsters. Cigars courtesy of Jon." },
-  { day:"SATURDAY · JUL 11", head:"Recovery & Hijinks", body:"Slow start (some slower than others). Pears run. Greg leads an expedition to a 'cool spot' and gets lost. Big meat dinner. Standings rounds after dark." },
-  { day:"SUNDAY · JUL 12", head:"Departure", body:"Pack up, clean Greg's place like the saints we aren't, group photo on the dock. Out by 11. Immediately start planning next year." },
+  { day:"THURSDAY · JUL 9", head:"Project Day (Lightly Supervised)", body:"The annual project. Pete builds the thing (this year: a railing for the front steps). Dave actually helps. Paul, Greg, and Bill (if he's here) pitch in. Tony 'supervises.' Jon and Mike arrive conveniently late to 'help.' Everyone else: sitting around, drinking, watching Pete work, cornhole, burgers — and a fire once it's dark. 🔨🍺" },
+  { day:"FRIDAY · JUL 10", head:"All Aboard the Tritoon", body:"Paul opens with legendary breakfast sandwiches. Then it's the Tritoon all day — cruising the lake, beers, floating on tubes, maybe the rope swing. We pay our respects to the island Paul has personally fertilized more than once 💩. Dinner: steaks, and a frankly unreasonable amount of meat 🥩. Then campfire, cigars, more drinking." },
+  { day:"SATURDAY · JUL 11", head:"More of the Same (Perfect)", body:"Same energy, fully dialed in. Cornhole. Lobsters. Throwing footballs and diving off the Tritoon to catch them. A lengthy discussion about going fishing — we will not go fishing. A search for chicks that turns up exactly zero chicks. House rule: under no circumstances do we leave the cabin or the lake. 🦞🏈" },
+  { day:"SUNDAY · JUL 12", head:"The Sad Drive Home", body:"Pack up, head out, and immediately start lying about how next year will be different." },
 ];
 
 // Mess Hall — paste from the Google Sheet: Night | Cook | Meal
 const MEALS = [
-  { night:"Thu", cook:"Paul",  meal:"Grill night — burgers, dogs, whatever's hot 🍔" },
-  { night:"Fri", cook:"Mike",  meal:"LOBSTAH NIGHT — giant lobsters, butter, chaos 🦞" },
-  { night:"Sat", cook:"Paul",  meal:"Big meat dinner — steaks / ribs, captain's choice 🥩" },
+  { night:"Thu", cook:"Paul",  meal:"Burgers + dogs while we watch Pete build something 🍔" },
+  { night:"Fri", cook:"Paul",  meal:"Steaks. An unreasonable amount of meat. 🥩" },
+  { night:"Sat", cook:"Mike",  meal:"LOBSTAH NIGHT — giant lobsters, butter, chaos 🦞" },
 ];
 const GROCERIES = ["Steak","Burgers","Buns","Eggs","Bacon","Butter (lots)","Coffee","Ice (more)","Chips","Bug spray"];
 const BOOZE = ["Beer (a stupid amount)","Bourbon","Tequila","Mixers","Limes","Bag of ice #47","Jon's cigars 🚬"];
-const RESERVATIONS = "Staying at Greg's place (HQ). Boat = Paul's. Pears Ice Cream — no res, just go. Lobsters: Mike's problem.";
+const RESERVATIONS = 'Staying at: The Camp (HQ). Boat = Tritoon. Supply runs: <a href="https://outpostexpressmarket.com/order" target="_blank" rel="noopener" style="font-weight:700">The Outpost ↗</a>';
 
 const LAKE = {
   // ⚠️ TODO: confirm exact lat/long for your dock. Default ≈ Oxford, ME end of Thompson Lake.
   lat: 44.07089, lon: -70.47969,   // 114 Black Island Rd dock
   dockTemp: "72",                       // manual water temp °F — update + push
-  bathymetry: "",                       // paste depth-map image URL here
-  wildlife: "Loons (the official mascot — listen for them at night), bald eagles, smallmouth bass, largemouth bass, the occasional moose sighting on the access road. Source: lakesofmaine.org Thompson Lake page.",
+  bathymetry: "",                       // optional: paste a depth-map IMAGE url to embed it inline
+  bathymetryLink: "https://usa.fishermap.org/depth-map/thompson-lake-me/",  // interactive depth map (linked out)
   amenities: "⛽ Marina: fuel, bait, basic supplies near the public boat launch. 🍦 Pears: the local ice cream + snack stop, non-negotiable daily visit.",
 };
+
+// Wildlife field guide — edit/add freely
+const WILDLIFE = [
+  { emoji:"🐦", name:"Common Loon", desc:"The lake's mascot. That haunting night call is them. Red eyes, deep divers — chicks ride on the parents' backs." },
+  { emoji:"🦅", name:"Bald Eagle", desc:"Nests around the shoreline. Watch one drop and snatch a fish off the surface — never not impressive." },
+  { emoji:"🐟", name:"Smallmouth Bass", desc:"Bronze, scrappy, all over the rocky drop-offs. Thompson is a legit smallmouth fishery." },
+  { emoji:"🎣", name:"Largemouth Bass", desc:"Hangs in the weedy, warmer coves. Bigger mouth, lazier fight, still a blast." },
+  { emoji:"🫎", name:"Moose", desc:"Rare but real — dawn/dusk near the access road. Give it a very wide berth. (Greg will swear he saw one.)" },
+  { emoji:"🦌", name:"White-tailed Deer", desc:"Common at the tree line and shoreline edges, especially first thing in the morning." },
+  { emoji:"🐢", name:"Painted Turtle", desc:"Stacked up sunbathing on every half-submerged log by midday." },
+  { emoji:"🪶", name:"Great Blue Heron", desc:"Statue-still in the shallows, then a lightning stab. Pure prehistoric energy." },
+  { emoji:"🦫", name:"Beaver", desc:"Dusk-shift engineers. Listen for the tail-slap when you drift too close." },
+];
 
 const PACKING = {
   "Essentials": ["Sunscreen","Sunglasses","Phone charger","Cash for Pears","Advil","Towel"],
@@ -533,13 +556,16 @@ document.getElementById('mealsBody').innerHTML = MEALS.map(m=>{
 }).join('');
 document.getElementById('groceryList').innerHTML = GROCERIES.map(g=>`<li class="chip">${g}</li>`).join('');
 document.getElementById('boozeList').innerHTML = BOOZE.map(b=>`<li class="chip">${b}</li>`).join('');
-document.getElementById('reservations').textContent = RESERVATIONS;
+document.getElementById('reservations').innerHTML = RESERVATIONS;
 
 /* ---- LAKE HQ ---- */
 document.getElementById('dockTemp').value = LAKE.dockTemp;
-document.getElementById('wildlife').textContent = LAKE.wildlife;
+document.getElementById('fieldGuide').innerHTML = WILDLIFE.map(w=>
+  `<div class="critter"><div class="pic">${w.emoji}</div><div class="nm">${w.name}</div><div class="desc">${w.desc}</div></div>`).join('');
 document.getElementById('amenities').textContent = LAKE.amenities;
-if(LAKE.bathymetry){ document.getElementById('bathy').innerHTML = `<img src="${LAKE.bathymetry}" style="width:100%;border-radius:10px" alt="bathymetry">`; }
+const bathyEl=document.getElementById('bathy');
+if(LAKE.bathymetry){ bathyEl.innerHTML = `<img src="${LAKE.bathymetry}" style="width:100%;border-radius:10px" alt="Thompson Lake depth map">`; }
+else { bathyEl.innerHTML = `<a href="${LAKE.bathymetryLink}" target="_blank" rel="noopener" style="font-weight:700;font-family:var(--body);font-size:.95rem">🗺️ Open the depth map ↗</a><div style="margin-top:8px">Max depth 121 ft · 4,419 acres · ~12 mi long</div>`; }
 fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LAKE.lat}&longitude=${LAKE.lon}&current=temperature_2m,wind_speed_10m&temperature_unit=fahrenheit&wind_speed_unit=mph`)
   .then(r=>r.json()).then(d=>{
     document.getElementById('airTemp').textContent = Math.round(d.current.temperature_2m);
