@@ -416,7 +416,7 @@ const LAKE = {
   dockTemp: "72",                       // manual water temp °F — update + push
   bathymetry: "",                       // optional: paste a depth-map IMAGE url to embed it inline
   bathymetryLink: "https://usa.fishermap.org/depth-map/thompson-lake-me/",  // interactive depth map (linked out)
-  amenities: "⛽ Marina: fuel, bait, basic supplies near the public boat launch. 🍦 Pears: the local ice cream + snack stop, non-negotiable daily visit.",
+  amenities: "🏪 The Outpost — the one-stop run for the whole weekend: gas for the boat ⛽, beer &amp; booze 🍺, food, and ice cream 🍦. You can even order ahead: <a href='https://outpostexpressmarket.com/order' target='_blank' rel='noopener' style='font-weight:700'>The Outpost ↗</a>. Also reportedly stocks chicks (heavily doubtful).",
 };
 
 // Wildlife field guide — edit/add freely
@@ -527,7 +527,7 @@ document.getElementById('reservations').innerHTML = RESERVATIONS;
 document.getElementById('dockTemp').value = LAKE.dockTemp;
 document.getElementById('fieldGuide').innerHTML = WILDLIFE.map(w=>
   `<div class="critter"><div class="pic">${w.emoji}</div><div class="nm">${w.name}</div><div class="desc">${w.desc}</div></div>`).join('');
-document.getElementById('amenities').textContent = LAKE.amenities;
+document.getElementById('amenities').innerHTML = LAKE.amenities;
 const bathyEl=document.getElementById('bathy');
 if(LAKE.bathymetry){ bathyEl.innerHTML = `<img src="${LAKE.bathymetry}" style="width:100%;border-radius:10px" alt="Thompson Lake depth map">`; }
 else { bathyEl.innerHTML = `<a href="${LAKE.bathymetryLink}" target="_blank" rel="noopener" style="font-weight:700;font-family:var(--body);font-size:.95rem">🗺️ Open the depth map ↗</a><div style="margin-top:8px">Max depth 121 ft · 4,419 acres · ~12 mi long</div>`; }
