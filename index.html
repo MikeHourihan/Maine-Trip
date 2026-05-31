@@ -203,12 +203,13 @@ footer .konami{opacity:.55;letter-spacing:1px}
 <nav>
   <span class="brand">🏖️ TLOB</span>
   <a href="#hero">Home</a>
+  <a href="#lake">Lake HQ</a>
   <a href="#crew">The Crew</a>
   <a href="#roster">Roster</a>
   <a href="#itinerary">Itinerary</a>
   <a href="#mess">Mess Hall</a>
-  <a href="#lake">Lake HQ</a>
   <a href="#packing">Packing</a>
+  <a href="#wildlife">Wildlife</a>
   <a href="#sound">Soundtrack</a>
   <a href="#vault">Vault</a>
 </nav>
@@ -223,6 +224,22 @@ footer .konami{opacity:.55;letter-spacing:1px}
   <div class="countdown" id="countdown"></div>
   <div class="cd-status" id="cdStatus"></div>
   <div id="dnp-wrap"><button id="dnp">🚨 DO NOT PRESS 🚨</button></div>
+</section>
+
+<!-- ===================== LAKE HQ (conditions) ===================== -->
+<section id="lake">
+  <div class="eyebrow">// live from the water</div>
+  <h2 class="title">THOMPSON LAKE <span class="alt">HQ</span> 🌊</h2>
+  <p class="sub">Conditions and the dock report, straight from the lake.</p>
+  <div class="grid g3">
+    <div class="card reveal"><div class="cd-lab" style="color:var(--cyan)">🌡️ AIR TEMP</div><div class="metric"><span class="v" id="airTemp">…</span><span class="u">°F</span></div><div class="cd-lab" id="wxUpdated">fetching…</div></div>
+    <div class="card reveal"><div class="cd-lab" style="color:var(--cyan)">💨 WIND</div><div class="metric"><span class="v" id="wind">…</span><span class="u">mph</span></div><div class="cd-lab">via Open-Meteo</div></div>
+    <div class="card reveal"><div class="cd-lab" style="color:var(--cyan)">🐟 DOCK REPORT · WATER TEMP</div><div class="metric"><input class="dock-input" id="dockTemp" value=""><span class="u">°F</span></div><div class="cd-lab">manually maintained</div></div>
+  </div>
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card reveal"><h4 style="font-family:var(--display);color:var(--gold);margin-bottom:6px">🗺️ Bathymetry</h4><div class="bathy" id="bathy"></div></div>
+    <div class="card reveal"><h4 style="font-family:var(--display);color:var(--gold);margin-bottom:6px">⚓ Amenities</h4><div id="amenities" style="font-size:.9rem"></div></div>
+  </div>
 </section>
 
 <!-- ===================== CREW PHOTO ===================== -->
@@ -267,28 +284,7 @@ footer .konami{opacity:.55;letter-spacing:1px}
   <div class="note">Cooking a night or want to swap one? Tell Mike and he'll update the grid. (He will not update the grid. This is the menu now. Make peace with it. 🤷)</div>
 </section>
 
-<!-- ===================== LAKE HQ ===================== -->
-<section id="lake">
-  <div class="eyebrow">// live from the water</div>
-  <h2 class="title">THOMPSON LAKE <span class="alt">HQ</span> 🌊</h2>
-  <p class="sub">Conditions, the dock report, and everything you need to look like you know the lake.</p>
-  <div class="grid g3">
-    <div class="card reveal"><div class="cd-lab" style="color:var(--cyan)">🌡️ AIR TEMP</div><div class="metric"><span class="v" id="airTemp">…</span><span class="u">°F</span></div><div class="cd-lab" id="wxUpdated">fetching…</div></div>
-    <div class="card reveal"><div class="cd-lab" style="color:var(--cyan)">💨 WIND</div><div class="metric"><span class="v" id="wind">…</span><span class="u">mph</span></div><div class="cd-lab">via Open-Meteo</div></div>
-    <div class="card reveal"><div class="cd-lab" style="color:var(--cyan)">🐟 DOCK REPORT · WATER TEMP</div><div class="metric"><input class="dock-input" id="dockTemp" value=""><span class="u">°F</span></div><div class="cd-lab">manually maintained</div></div>
-  </div>
-  <div class="grid g2" style="margin-top:16px">
-    <div class="card reveal"><h4 style="font-family:var(--display);color:var(--gold);margin-bottom:6px">🗺️ Bathymetry</h4><div class="bathy" id="bathy"></div></div>
-    <div class="card reveal"><h4 style="font-family:var(--display);color:var(--gold);margin-bottom:6px">⚓ Amenities</h4><div id="amenities" style="font-size:.9rem"></div></div>
-  </div>
-  <div class="card reveal" style="margin-top:16px">
-    <h4 style="font-family:var(--display);color:var(--gold);margin-bottom:4px">🦅 Wildlife Field Guide</h4>
-    <p style="font-size:.85rem;color:var(--ink-dim);margin-bottom:14px">What you'll see and hear out here. Thompson runs ~4,419 acres and up to 121 ft deep — plenty of room for all of it.</p>
-    <div class="field-guide" id="fieldGuide"></div>
-    <p style="font-size:.72rem;color:var(--ink-dim);margin-top:14px">Source: lakesofmaine.org Thompson Lake page · Maine DEP &amp; IF&amp;W.</p>
-  </div>
-  <div class="note">Note from build: USGS-01058000 is a <b>lake-level (stage/elevation)</b> gage — it does <b>not</b> serve water temp. So water temp stays manual via the Dock Report above.</div>
-</section>
+
 
 <!-- ===================== PACKING ===================== -->
 <section id="packing">
@@ -296,6 +292,17 @@ footer .konami{opacity:.55;letter-spacing:1px}
   <h2 class="title">PACKING <span class="alt">LIST</span> ✅</h2>
   <p class="sub">Checks save to your device. Forget the cursed item at your own peril.</p>
   <div class="grid g2" id="packing-cols"></div>
+</section>
+
+<!-- ===================== WILDLIFE ===================== -->
+<section id="wildlife">
+  <div class="eyebrow">// the locals</div>
+  <h2 class="title">WILDLIFE <span class="alt">FIELD GUIDE</span> 🦅</h2>
+  <p class="sub">What you'll see and hear out here. Thompson runs ~4,419 acres and up to 121 ft deep — plenty of room for all of it.</p>
+  <div class="card reveal">
+    <div class="field-guide" id="fieldGuide"></div>
+    <p style="font-size:.72rem;color:var(--ink-dim);margin-top:14px">Source: lakesofmaine.org Thompson Lake page &middot; Maine DEP &amp; IF&amp;W.</p>
+  </div>
 </section>
 
 <!-- ===================== INTEL (fake) ===================== -->
