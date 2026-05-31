@@ -151,7 +151,7 @@ nav::-webkit-scrollbar{height:0}
 .timeline{position:relative;padding-left:26px}
 .timeline::before{content:"";position:absolute;left:8px;top:0;bottom:0;width:3px;background:var(--line)}
 .tl-item{position:relative;margin-bottom:20px}
-.tl-item::before{content:"";position:absolute;left:-22px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--gold);border:3px solid var(--bg)}
+.tl-item::before{content:"";position:absolute;left:-22px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--gold);border:3px solid var(--card)}
 .tl-day{font-family:var(--mono);font-size:.7rem;letter-spacing:.15em;color:var(--cyan);text-transform:uppercase}
 .tl-head{font-family:var(--display);font-size:1.05rem;color:var(--ink);margin:2px 0 6px}
 
@@ -261,7 +261,7 @@ footer{text-align:center;padding:40px 18px 70px;color:var(--ink-dim);font-family
   <div class="eyebrow">// the plan (loose)</div>
   <h2 class="title">THE <span class="alt">ITINERARY</span> 🗺️</h2>
   <p class="sub">Subject to change based on hangovers and weather.</p>
-  <div class="timeline" id="timeline"></div>
+  <div class="card reveal"><div class="timeline" id="timeline"></div></div>
 </section>
 
 <!-- ===================== MESS HALL ===================== -->
