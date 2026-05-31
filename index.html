@@ -235,14 +235,14 @@ footer{text-align:center;padding:40px 18px 70px;color:var(--ink-dim);font-family
 
 <!-- ===================== DAILY DROP ===================== -->
 <section id="drop">
-  <div class="eyebrow">// today's intel</div>
-  <h2 class="title">THE DAILY <span class="alt">DROP</span> ✉️</h2>
-  <p class="sub">A new one lands every day until we hit the water. Rip it open.</p>
+  <div class="eyebrow">// this week's intel</div>
+  <h2 class="title">THE WEEKLY <span class="alt">DROP</span> ✉️</h2>
+  <p class="sub">A new one lands every week or so on the road to the lake. Rip it open.</p>
   <div class="envelope card reveal" style="padding:0;border:none;box-shadow:none">
     <div class="drop-body" id="dropBody"></div>
     <div class="drop-cover" id="dropCover">
       <div class="seal">✉️</div>
-      <div class="lab">TODAY'S DROP</div>
+      <div class="lab">THIS WEEK'S DROP</div>
       <div class="hint" id="dropDate">tap to rip open</div>
     </div>
   </div>
@@ -252,7 +252,7 @@ footer{text-align:center;padding:40px 18px 70px;color:var(--ink-dim);font-family
 <section id="roster">
   <div class="eyebrow">// the crew</div>
   <h2 class="title">THE <span class="alt">ROSTER</span> 🃏</h2>
-  <p class="sub">8 guys from Hopedale, MA — Class of '96. Married, kids, decades deep. Tap a card to flip it. No witnesses.</p>
+  <p class="sub">8 guys from Hopedale, MA — Class of '96. Married, kids, old balls. Tap a card to flip it. No witnesses.</p>
   <div class="roster-grid reveal" id="rosterGrid"></div>
 </section>
 
@@ -369,11 +369,11 @@ const HYPE_QUOTES = [
 /* Daily Drop — schema: {date, type:"photo|quote|fact|challenge|milestone", title, body, image?}
    `evergreen:true` = used as fallback on days with no scheduled drop. */
 const DROPS = [
-  { evergreen:true, type:"quote", title:"No drop scheduled today", body:"But the countdown's still ticking. Go settle the Zeppelin/Who debate. 🎸" },
+  { evergreen:true, type:"milestone", title:"THE SITE IS LIVE 🚨", body:"Welcome to Thompson Lake HQ. Bookmark it. A fresh drop lands here every day until we hit the water on July 9. Flip the roster cards, poke around, find the easter eggs — and whatever you do, do NOT press the button. (You're going to press the button.)" },
   { date:"2026-07-01", type:"milestone", title:"T-MINUS 8 DAYS", body:"It's officially July. Lake season is real. Start hydrating — you'll want the head start. 💧" },
-  { date:"2026-07-06", type:"challenge", title:"CHALLENGE: First In", body:"First man in the water Thursday earns 5 points. Greg, this is not a swim race. Document it. 💦" },
+  { date:"2026-07-06", type:"challenge", title:"CHALLENGE: First In", body:"First man in the water Thursday earns eternal glory and the first cold one. Greg, this is not a swim race. 💦" },
   { date:"2026-07-08", type:"fact", title:"FUN FACT", body:"Thompson Lake is one of Maine's clearest lakes. You will be the murkiest thing in it." },
-  { date:"2026-07-09", type:"milestone", title:"🚗 DEPARTURE DAY", body:"It's go time. Gas up, grab the cooler, send your ETA. Greg's place by mid-afternoon." },
+  { date:"2026-07-09", type:"milestone", title:"🚗 DEPARTURE DAY", body:"It's go time. Gas up, grab the cooler, send your ETA. The Camp by mid-afternoon." },
 ];
 
 const ROSTER = [
@@ -421,7 +421,7 @@ const ROSTER = [
 const ITINERARY = [
   { day:"THURSDAY · JUL 9", head:"Project Day (Lightly Supervised)", body:"The annual project. Pete builds the thing (this year: a railing for the front steps). Dave actually helps. Paul, Greg, and Bill (if he's here) pitch in. Tony 'supervises.' Jon and Mike arrive conveniently late to 'help.' Everyone else: sitting around, drinking, watching Pete work, cornhole, burgers — and a fire once it's dark. 🔨🍺" },
   { day:"FRIDAY · JUL 10", head:"All Aboard the Tritoon", body:"Paul opens with legendary breakfast sandwiches. Then it's the Tritoon all day — cruising the lake, beers, floating on tubes, maybe the rope swing. We pay our respects to the island Paul has personally fertilized more than once 💩. Dinner: steaks, and a frankly unreasonable amount of meat 🥩. Then campfire, cigars, more drinking." },
-  { day:"SATURDAY · JUL 11", head:"More of the Same (Perfect)", body:"Same energy, fully dialed in. Cornhole. Lobsters. Throwing footballs and diving off the Tritoon to catch them. A lengthy discussion about going fishing — we will not go fishing. A search for chicks that turns up exactly zero chicks. House rule: under no circumstances do we leave the cabin or the lake. 🦞🏈" },
+  { day:"SATURDAY · JUL 11", head:"More of the Same (Perfect)", body:"Same energy, fully dialed in. Cornhole. Lobsters. Throwing footballs and diving off the Tritoon to catch them. An inevitable deep-dive into whatever happened to Shawn Balian, Matt Paolini, or maybe Jen Wilding — hard to predict who, but it's coming. A search for chicks that turns up exactly zero chicks. House rule: under no circumstances do we leave the cabin or the lake. 🦞🏈" },
   { day:"SUNDAY · JUL 12", head:"The Sad Drive Home", body:"Pack up, head out, and immediately start lying about how next year will be different." },
 ];
 
@@ -513,11 +513,13 @@ function tick(){
 }
 setInterval(tick,1000); tick();
 
-/* ---- DAILY DROP ---- */
+/* ---- WEEKLY DROP ---- */
 (function(){
   const today = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD local
-  let drop = DROPS.find(d=>d.date===today) || DROPS.find(d=>d.evergreen) || DROPS[0];
-  document.getElementById('dropDate').textContent = "tap to rip open · " + today;
+  // show the most recent dated drop that's on or before today; else the evergreen
+  const live = DROPS.filter(d=>d.date && d.date<=today).sort((a,b)=>a.date<b.date?1:-1);
+  let drop = live[0] || DROPS.find(d=>d.evergreen) || DROPS[0];
+  document.getElementById('dropDate').textContent = drop.date ? ("posted " + drop.date + " · tap to rip open") : "tap to rip open";
   const body = document.getElementById('dropBody');
   body.innerHTML = `<div class="drop-type">${drop.type}</div><div class="drop-title">${drop.title}</div><div>${drop.body}</div>${drop.image?`<img src="${drop.image}" alt="">`:''}`;
   const cover = document.getElementById('dropCover');
