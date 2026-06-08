@@ -195,6 +195,28 @@ footer .konami{opacity:.55;letter-spacing:1px}
 /* confetti + fx canvases */
 #fx,#egg{position:fixed;inset:0;pointer-events:none;z-index:60}
 .note{font-family:var(--mono);font-size:.7rem;color:var(--ink-dim);border-left:3px solid var(--gold);padding:6px 10px;margin-top:10px;background:rgba(255,206,58,.05)}
+
+/* ===================== ORACLE / SLOT MACHINE ===================== */
+#chaos{padding-top:20px;padding-bottom:30px}
+.cp-slot{max-width:440px;margin:0 auto}
+.cp-cabinet{background:linear-gradient(180deg,#f6c14b,#e0992a 60%,#c47e1e);border:2px solid #b9781a;border-radius:22px;padding:14px;box-shadow:0 14px 30px rgba(26,50,38,.35),inset 0 2px 0 rgba(255,255,255,.55),inset 0 -5px 9px rgba(0,0,0,.22)}
+.cp-bulbs{display:flex;justify-content:center;gap:9px;margin:2px 0 8px}
+.cp-bulbs i{width:8px;height:8px;border-radius:50%;background:#fff8d6;box-shadow:0 0 8px 2px #ffd23a;display:block;animation:cpBlink 1.2s infinite}
+.cp-bulbs i:nth-child(2n){animation-delay:.6s}
+@keyframes cpBlink{0%,100%{opacity:1}50%{opacity:.25}}
+.cp-marquee{text-align:center;font-family:var(--display);font-size:1rem;color:#fff;letter-spacing:.05em;text-shadow:0 2px 0 #a83a1d,0 0 12px rgba(255,255,255,.5);padding:0 0 10px}
+.cp-screen{background:#10242e;border:3px solid #d9a233;border-radius:12px;padding:18px 16px;min-height:108px;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 3px 10px rgba(0,0,0,.6),inset 0 0 0 3px #0a161c;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 2px,transparent 2px 4px)}
+.cp-output{color:#9fe8ff;font-family:var(--mono);font-weight:700;font-size:1rem;line-height:1.4;margin:0;text-align:center;text-shadow:0 0 10px rgba(159,232,255,.4)}
+.cp-output.cp-spinning{animation:cpFlicker .07s linear infinite;opacity:.85;filter:blur(.3px)}
+.cp-output.cp-land{animation:cpPop .4s ease}
+@keyframes cpFlicker{0%{transform:translateY(-3px)}50%{transform:translateY(3px)}100%{transform:translateY(-3px)}}
+@keyframes cpPop{0%{transform:scale(.96)}40%{transform:scale(1.05)}100%{transform:scale(1)}}
+.cp-base{display:flex;justify-content:center;margin-top:14px}
+.cp-lever{font-family:var(--display);font-size:1.05rem;color:#fff;background:var(--coral);border:none;border-radius:50px;padding:14px 38px;cursor:pointer;box-shadow:0 6px 0 #7a1f0d,0 8px 16px rgba(0,0,0,.3);transition:transform .08s,box-shadow .08s}
+.cp-lever:active{transform:translateY(4px);box-shadow:0 2px 0 #7a1f0d}
+.cp-lever:disabled{opacity:.65;cursor:not-allowed}
+.cp-count{font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:#fff;opacity:.85;text-align:center;margin:10px 0 0;min-height:1em}
+.cp-tag{text-align:center;font-family:var(--mono);font-size:.72rem;color:var(--ink-dim);margin:12px auto 0;max-width:36ch}
 </style>
 </head>
 <body>
@@ -203,6 +225,7 @@ footer .konami{opacity:.55;letter-spacing:1px}
 <nav>
   <span class="brand">🏖️ TLOB</span>
   <a href="#hero">Home</a>
+  <a href="#chaos">🎰 Oracle</a>
   <a href="#lake">Lake HQ</a>
   <a href="#crew">The Crew</a>
   <a href="#roster">Roster</a>
@@ -224,6 +247,20 @@ footer .konami{opacity:.55;letter-spacing:1px}
   <div class="countdown" id="countdown"></div>
   <div class="cd-status" id="cdStatus"></div>
   <div id="dnp-wrap"><button id="dnp">🚨 DO NOT PRESS 🚨</button></div>
+</section>
+
+<!-- ===================== ORACLE / SLOT MACHINE ===================== -->
+<section id="chaos">
+  <div class="cp-slot reveal">
+    <div class="cp-cabinet">
+      <div class="cp-bulbs"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="cp-marquee">🔮 THE LAKE ORACLE 🔮</div>
+      <div class="cp-screen"><p id="cp-output" class="cp-output">PULL TO SEE YOUR FATE 👀</p></div>
+      <div class="cp-base"><button id="cp-lever" class="cp-lever">🎰 PULL</button></div>
+      <p id="cp-count" class="cp-count"></p>
+    </div>
+  </div>
+  <p class="cp-tag">The mountain spirits have already decided how this weekend goes.</p>
 </section>
 
 <!-- ===================== LAKE HQ (conditions) ===================== -->
@@ -709,6 +746,74 @@ function eggGo(){
     if(frames++<240) requestAnimationFrame(rain); else {ec.clearRect(0,0,egg.width,egg.height);banner.remove();}
   })();
 }
+
+/* ============================================================
+   🔮 CHAOS PREDICTOR
+   ============================================================ */
+(function(){
+  // EDIT CREW HERE
+  const crew = ["Paul","Greg","Jon","Dave","Tony","Pete","Bill","Mike"];
+
+  // CUT / ADD / SWAP LINES HERE. {x}=random guy, {y}=a different guy
+  const lines = [
+    "{x} loses his phone in the lake by Day 2 🪦📱",
+    "{x} swears he's taking it easy this year. Caves by 11am Thursday 🍺",
+    "{x} falls asleep in a camp chair before 9pm and wakes up decorated 🖊️😴",
+    "{x} and {y} reignite an argument from 1995 nobody else remembers 🔥",
+    "{x} throws his back out doing something that should not throw a back out 🦴",
+    "{x} appoints himself Grill Captain and guards it like the Secret Service 🔥🥩",
+    "{x} catches one (1) fish and refuses to shut up about it 🎣",
+    "{x} flips the kayak. The phone survives. The dignity does not 🛶",
+    "{x} swears he knows a shortcut on the drive up. Adds 40 minutes 🗺️",
+    "{x} starts a quick card game that ends a 30-year friendship by midnight 🃏",
+    "{x} says he's only having one. We all know {x} 🍻",
+    "{x} gets a sunburn in the exact shape of his t-shirt ☀️🦞",
+    "{x} tells the same story as last year. Everyone lets him ❤️",
+    "{x} and {y} disappear for two hours, return with no explanation 🤐",
+    "{x} brings 14 of one thing and zero of the thing we needed 📦",
+    "Someone floats a 1am polar plunge. Regret arrives on schedule 🥶",
+    "The cooler runs out of ice ~6 hours before anyone planned 🧊",
+    "A simple group decision takes 45 minutes and satisfies no one 🗳️",
+    "The grill runs out of propane mid-burger. A classic 🔥❌",
+    "A boat situation requires the phrase \"it's fine, it's fine\" ⛵",
+    "The we-should-go-to-bed talk happens three times before anyone moves 🛏️",
+    "By Day 3, two guys run purely on ibuprofen and spite 💊",
+    "Someone gets left on read for 9 hours and calls it \"bad service\" 📵"
+  ];
+
+  const out = document.getElementById('cp-output');
+  const lever = document.getElementById('cp-lever');
+  const countEl = document.getElementById('cp-count');
+  let spinning = false, count = 0;
+  const pick = a => a[Math.floor(Math.random()*a.length)];
+  function fate(){
+    const a = pick(crew);
+    let b = pick(crew), g = 0;
+    while(b===a && crew.length>1 && g<20){ b=pick(crew); g++; }
+    return pick(lines).replace(/\{x\}/g,a).replace(/\{y\}/g,b);
+  }
+  function pull(){
+    if(spinning) return;
+    spinning = true; lever.disabled = true;
+    out.classList.add('cp-spinning');
+    let t = 0;
+    const iv = setInterval(()=>{
+      out.textContent = fate();
+      if(++t >= 15){
+        clearInterval(iv);
+        out.classList.remove('cp-spinning');
+        out.textContent = fate();
+        out.classList.add('cp-land');
+        setTimeout(()=>out.classList.remove('cp-land'),400);
+        count++;
+        countEl.textContent = `Fates sealed: ${count}`;
+        if(count===5 && typeof confetti==='function') confetti(.5);
+        spinning = false; lever.disabled = false;
+      }
+    }, 70);
+  }
+  if(lever) lever.addEventListener('click', pull);
+})();
 </script>
 </body>
 </html>
