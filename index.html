@@ -551,6 +551,32 @@ const hq = document.getElementById('hypeQuote');
 function rollQuote(){ hq.textContent = HYPE_QUOTES[Math.floor(Math.random()*HYPE_QUOTES.length)]; }
 hq.addEventListener('click', rollQuote); rollQuote();
 
+/* ============================================================
+   🎉 CONFETTI
+   ============================================================ */
+const fx=document.getElementById('fx'),fxc=fx.getContext('2d');
+function sizeFx(){fx.width=innerWidth;fx.height=innerHeight;} sizeFx(); addEventListener('resize',sizeFx);
+let parts=[];
+function confetti(scale=1){
+  const cols=['#ff5e3a','#2ec4b6','#ffce3a','#ff7eb6','#f5ead2'];
+  for(let i=0;i<Math.floor(140*scale);i++){
+    parts.push({x:innerWidth/2,y:innerHeight*0.3,vx:(Math.random()-.5)*14,vy:Math.random()*-14-4,g:.4,
+      s:Math.random()*8+4,c:cols[i%cols.length],r:Math.random()*6,vr:(Math.random()-.5)*.4,life:120});
+  }
+  if(!fxRunning) runFx();
+}
+let fxRunning=false;
+function runFx(){
+  fxRunning=true;
+  (function loop(){
+    fxc.clearRect(0,0,fx.width,fx.height);
+    parts.forEach(p=>{p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;p.life--;
+      fxc.save();fxc.translate(p.x,p.y);fxc.rotate(p.r);fxc.fillStyle=p.c;fxc.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6);fxc.restore();});
+    parts=parts.filter(p=>p.life>0&&p.y<fx.height+40);
+    if(parts.length){requestAnimationFrame(loop);}else{fxc.clearRect(0,0,fx.width,fx.height);fxRunning=false;}
+  })();
+}
+
 /* ---- countdown + milestone confetti ---- */
 const dep = new Date(TRIP.departure).getTime();
 const cdEl = document.getElementById('countdown'), statusEl = document.getElementById('cdStatus');
@@ -659,32 +685,6 @@ document.getElementById('playlistWrap').innerHTML =
 /* ---- SCROLL REVEALS ---- */
 const io=new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-
-/* ============================================================
-   🎉 CONFETTI
-   ============================================================ */
-const fx=document.getElementById('fx'),fxc=fx.getContext('2d');
-function sizeFx(){fx.width=innerWidth;fx.height=innerHeight;} sizeFx(); addEventListener('resize',sizeFx);
-let parts=[];
-function confetti(scale=1){
-  const cols=['#ff5e3a','#2ec4b6','#ffce3a','#ff7eb6','#f5ead2'];
-  for(let i=0;i<Math.floor(140*scale);i++){
-    parts.push({x:innerWidth/2,y:innerHeight*0.3,vx:(Math.random()-.5)*14,vy:Math.random()*-14-4,g:.4,
-      s:Math.random()*8+4,c:cols[i%cols.length],r:Math.random()*6,vr:(Math.random()-.5)*.4,life:120});
-  }
-  if(!fxRunning) runFx();
-}
-let fxRunning=false;
-function runFx(){
-  fxRunning=true;
-  (function loop(){
-    fxc.clearRect(0,0,fx.width,fx.height);
-    parts.forEach(p=>{p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;p.life--;
-      fxc.save();fxc.translate(p.x,p.y);fxc.rotate(p.r);fxc.fillStyle=p.c;fxc.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6);fxc.restore();});
-    parts=parts.filter(p=>p.life>0&&p.y<fx.height+40);
-    if(parts.length){requestAnimationFrame(loop);}else{fxc.clearRect(0,0,fx.width,fx.height);fxRunning=false;}
-  })();
-}
 
 /* ============================================================
    🚨 DO NOT PRESS — dodges, then airhorn
